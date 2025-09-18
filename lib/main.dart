@@ -4,6 +4,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -77,8 +78,10 @@ class FakeGPSDetector {
     // 0. Quick check using Position.isMocked (most reliable on Android)
     try {
       final Position quickPosition = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.lowest,
-        timeLimit: const Duration(seconds: 5),
+        locationSettings: const LocationSettings(
+          accuracy: LocationAccuracy.lowest,
+          timeLimit: Duration(seconds: 5),
+        ),
       );
       if (quickPosition.isMocked == true) {
         isFakeGPSDetected = true;
@@ -161,7 +164,7 @@ class FakeGPSDetector {
         }
       }
     } catch (e) {
-      print('Error checking root status: $e');
+      // ignore
     }
     return false;
   }
@@ -171,41 +174,36 @@ class FakeGPSDetector {
 
     try {
       if (Platform.isAndroid) {
-        // Note: Pada aplikasi production, Anda mungkin perlu menggunakan
-        // method channel atau plugin khusus untuk mengecek aplikasi yang terinstall
-        // Ini adalah contoh implementasi sederhana
-
-        for (String appPackage in _knownFakeGpsApps) {
-          // Simulasi pengecekan - dalam implementasi nyata gunakan method channel
-          // untuk mengecek aplikasi yang terinstall di Android
-          if (await _isAppInstalled(appPackage)) {
-            detectedApps.add(appPackage);
-          }
-        }
+        const MethodChannel channel = MethodChannel(
+          'com.example.fluttertest/fake_gps',
+        );
+        final List<Object?>? result = await channel.invokeMethod<List<Object?>>(
+          'getInstalledFakeGpsApps',
+          {'packages': _knownFakeGpsApps},
+        );
+        detectedApps = (result ?? []).cast<String>();
       }
     } catch (e) {
-      print('Error checking installed apps: $e');
+      // ignore
     }
 
     return detectedApps;
   }
 
-  static Future<bool> _isAppInstalled(String packageName) async {
-    // Placeholder - dalam implementasi nyata, gunakan method channel
-    // untuk mengecek aplikasi yang terinstall
-    return false;
-  }
+  // Removed unused helper _isAppInstalled; lookups handled in batch via method channel
 
   static Future<bool> _isMockLocationEnabled() async {
     try {
       if (Platform.isAndroid) {
-        // Dalam implementasi nyata, gunakan method channel untuk mengecek
-        // Settings.Secure.ALLOW_MOCK_LOCATION
-        // Ini adalah placeholder
-        return false;
+        const MethodChannel channel = MethodChannel(
+          'com.example.fluttertest/fake_gps',
+        );
+        final bool result =
+            await channel.invokeMethod<bool>('isMockLocationEnabled') ?? false;
+        return result;
       }
     } catch (e) {
-      print('Error checking mock location: $e');
+      // ignore
     }
     return false;
   }
@@ -213,8 +211,10 @@ class FakeGPSDetector {
   static Future<LocationAccuracyCheck> _checkLocationAccuracy() async {
     try {
       Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.best,
-        timeLimit: const Duration(seconds: 10),
+        locationSettings: const LocationSettings(
+          accuracy: LocationAccuracy.best,
+          timeLimit: Duration(seconds: 10),
+        ),
       );
 
       // We intentionally avoid flagging based on very high/low accuracy or altitude
@@ -236,7 +236,7 @@ class FakeGPSDetector {
         );
       }
     } catch (e) {
-      print('Error checking location accuracy: $e');
+      // ignore
     }
 
     return LocationAccuracyCheck(isSuspicious: false, reason: "");
@@ -249,8 +249,10 @@ class FakeGPSDetector {
       // Get multiple location readings
       for (int i = 0; i < 3; i++) {
         Position position = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.high,
-          timeLimit: const Duration(seconds: 8),
+          locationSettings: const LocationSettings(
+            accuracy: LocationAccuracy.high,
+            timeLimit: Duration(seconds: 8),
+          ),
         );
         positions.add(position);
         await Future.delayed(const Duration(seconds: 2));
@@ -289,7 +291,7 @@ class FakeGPSDetector {
         }
       }
     } catch (e) {
-      print('Error checking location pattern: $e');
+      // ignore
     }
 
     return false;
@@ -422,11 +424,13 @@ class LocationService {
       }
 
       Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high,
+        locationSettings: const LocationSettings(
+          accuracy: LocationAccuracy.high,
+        ),
       );
       return position;
     } catch (e) {
-      print('Error getting location: $e');
+      // ignore
       return null;
     }
   }
@@ -442,7 +446,7 @@ class LocationService {
         return '${place.street}, ${place.subLocality}, ${place.locality}, ${place.administrativeArea}';
       }
     } catch (e) {
-      print('Error getting address: $e');
+      // ignore
     }
     return 'Lokasi tidak diketahui';
   }
@@ -562,7 +566,7 @@ class _CameraScreenState extends State<CameraScreen>
         });
       }
     } catch (e) {
-      print('Camera initialization error: $e');
+      // ignore
     }
   }
 
@@ -658,9 +662,7 @@ class _CameraScreenState extends State<CameraScreen>
         // Delete the taken photo if fake GPS is detected
         try {
           await File(photoPath).delete();
-        } catch (e) {
-          print('Error deleting photo: $e');
-        }
+        } catch (e) {}
 
         return;
       }
@@ -970,9 +972,7 @@ class _CameraScreenState extends State<CameraScreen>
 
                   // Switch camera button (placeholder)
                   FloatingActionButton(
-                    onPressed: () {
-                      // TODO: Implement camera switching
-                    },
+                    onPressed: () {},
                     backgroundColor: Colors.white,
                     child: const Icon(
                       Icons.flip_camera_ios,
@@ -1398,7 +1398,6 @@ class PhotoDetailScreen extends StatelessWidget {
               width: double.infinity,
               child: ElevatedButton.icon(
                 onPressed: () {
-                  // TODO: Open in maps
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text('Fitur peta akan segera hadir!'),

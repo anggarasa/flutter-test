@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- Permissions -->
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
+    <!-- Optional: Prefer explicit package visibility over QUERY_ALL_PACKAGES -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -42,15 +42,20 @@
             android:name="flutterEmbedding"
             android:value="2" />
     </application>
-    <!-- Required to query activities that can process text, see:
-         https://developer.android.com/training/package-visibility and
-         https://developer.android.com/reference/android/content/Intent#ACTION_PROCESS_TEXT.
-
-         In particular, this is used by the Flutter engine in io.flutter.plugin.text.ProcessTextPlugin. -->
+    <!-- Package visibility for known fake GPS apps -->
     <queries>
-        <intent>
-            <action android:name="android.intent.action.PROCESS_TEXT"/>
-            <data android:mimeType="text/plain"/>
-        </intent>
+        <package android:name="com.lexa.fakegps"/>
+        <package android:name="com.incorporateapps.fakegps.fre"/>
+        <package android:name="com.blogspot.techzone.fakegps"/>
+        <package android:name="com.evezzon.fakegps"/>
+        <package android:name="com.theappninjas.gpsjoystick"/>
+        <package android:name="com.app.fakelocations"/>
+        <package android:name="com.fakegps.location"/>
+        <package android:name="ru.gavrikov.mocklocations"/>
+        <package android:name="com.mock.location.mockgps"/>
+        <package android:name="app.greyshirts.snoopsnitch"/>
+        <package android:name="com.dxshiv.gps.location.mock"/>
+        <package android:name="com.mock.location"/>
+        <package android:name="org.hola.fakegps"/>
     </queries>
 </manifest>
