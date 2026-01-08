@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class AppColors {
   // Primary Colors - Modern Purple/Violet Theme
-  static const Color primary = Color(0xFF6C5CE7);
+  static const Color primary = Color(0xFF5B9EE1);
   static const Color primaryLight = Color(0xFF9B88FF);
   static const Color primaryDark = Color(0xFF5A4FCF);
 
