@@ -9,7 +9,7 @@ class WidgetOnboardingTwo extends StatelessWidget {
   Widget build(BuildContext context) {
     return OnboardingPageContent(
       data: OnboardingData(
-        image: Assets.images.imgOnboarding2.svg(fit: BoxFit.contain),
+        image: Assets.images.imgOnboarding2.image(fit: BoxFit.contain),
         title: 'Follow Latest\nStyle Shoes',
         subtitle:
             'There Are Many Beautiful And\nAttractive Plants To Your Room',

@@ -9,7 +9,7 @@ class WidgetOnboardingOne extends StatelessWidget {
   Widget build(BuildContext context) {
     return OnboardingPageContent(
       data: OnboardingData(
-        image: Assets.images.imgOnboard1.svg(fit: BoxFit.contain),
+        image: Assets.images.imgOnboarding1.image(fit: BoxFit.contain),
         title: 'Start Journey\nWith Nike',
         subtitle: 'Smart, Gorgeous & Fashionable\nCollection',
       ),

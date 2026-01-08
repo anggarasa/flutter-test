@@ -63,13 +63,14 @@ class OnboardingPageContent extends StatelessWidget {
                   ),
 
                   // Product image
-                  Center(
+                  Positioned.fill(
                     child: Padding(
-                      padding: EdgeInsets.only(top: size.height * 0.05),
-                      child: SizedBox(
-                        width: size.width * 0.95,
-                        child: data.image,
+                      padding: EdgeInsets.only(
+                        top: size.height * 0.05,
+                        left: 16,
+                        right: 16,
                       ),
+                      child: FittedBox(fit: BoxFit.contain, child: data.image),
                     ),
                   ),
                 ],
@@ -80,11 +81,11 @@ class OnboardingPageContent extends StatelessWidget {
             Expanded(
               flex: 4,
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
+                padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 34),
                     // Title
                     Text(
                       data.title,
@@ -96,7 +97,7 @@ class OnboardingPageContent extends StatelessWidget {
                         letterSpacing: -0.5,
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 8),
                     // Subtitle
                     Text(
                       data.subtitle,
@@ -106,7 +107,7 @@ class OnboardingPageContent extends StatelessWidget {
                         height: 1.5,
                       ),
                     ),
-                    const Spacer(),
+                    // const Spacer(),
                   ],
                 ),
               ),

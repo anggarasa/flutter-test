@@ -9,7 +9,7 @@ class WidgetOnboardingTree extends StatelessWidget {
   Widget build(BuildContext context) {
     return OnboardingPageContent(
       data: OnboardingData(
-        image: Assets.images.imgOnboarding3.svg(fit: BoxFit.contain),
+        image: Assets.images.imgOnboarding3.image(fit: BoxFit.contain),
         title: 'Summer Shoes\nNike 2024',
         subtitle: 'Amet Minim Mlllt Non Deserunt\nUIIamco Est Sit Aliqua Dolor',
       ),
