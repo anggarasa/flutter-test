@@ -38,8 +38,22 @@ class $AssetsImagesGen {
   SvgGenImage get imgOnboard1 =>
       const SvgGenImage('assets/images/img_onboard_1.svg');
 
+  /// File path: assets/images/img_onboarding_2.svg
+  SvgGenImage get imgOnboarding2 =>
+      const SvgGenImage('assets/images/img_onboarding_2.svg');
+
+  /// File path: assets/images/img_onboarding_3.svg
+  SvgGenImage get imgOnboarding3 =>
+      const SvgGenImage('assets/images/img_onboarding_3.svg');
+
   /// List of all assets
-  List<dynamic> get values => [aGitkeep, imgOnbardingRing, imgOnboard1];
+  List<dynamic> get values => [
+    aGitkeep,
+    imgOnbardingRing,
+    imgOnboard1,
+    imgOnboarding2,
+    imgOnboarding3,
+  ];
 }
 
 class Assets {
